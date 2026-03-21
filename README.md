@@ -2,6 +2,10 @@
 
   AI Chat application
 
+# Live Demo Link
+
+  https://ai-chat-iota-peach.vercel.app/
+
 # Features
 
   - New Chat functionality with input and display response from AI
@@ -19,12 +23,13 @@
   - Tailwind CSS
   - Hugging Face API
   - Local Storage for persistence
+  - Deployed using Vercel
 
 # Project Structure
 
   src/
   ├── components/
-  │   ├── chatInterface.tsx
+  │   ├── chatinterface.tsx
   │   ├── sidenav.tsx
   │
   ├── hooks/
@@ -59,4 +64,12 @@
     npm run dev
   4. Open in browser
     http://localhost:5173
+  
+  5. For deployment
+    npm run build
 
+# Deploy to Vercel
+
+  1. npm install -g 
+  2. vercel login
+  3. vercel --prod
