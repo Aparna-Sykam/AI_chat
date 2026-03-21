@@ -1,4 +1,4 @@
-import ChatInterface from "../components/chatInterface";
+import ChatInterface from "../components/chatinterface";
 import { useChatInterface } from "../hooks/useChatInterface";
 
 export default function ChatPage() {
