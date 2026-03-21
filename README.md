@@ -4,28 +4,47 @@
 
 # Features
 
-  . New Chat functionality (UI)
-
+  - New Chat functionality with input and display response from AI
+  - Chat History
+  - Delete button to delete individual chats
+  - Clear button to clear messages in current session
+  - Loading and Error handling
+  - Like and dislike buttons for feedback
 
 # Tech Stack
 
-  Frontend: React (TypeScript)
-
-  Styling: Tailwind CSS
-
-  Build Tool: Vite
-
-  Icons: lucide-react
+  - React+TypeScript+Vite
+  - Redux for state management
+  - React Router for routing
+  - Tailwind CSS
+  - Hugging Face API
+  - Local Storage for persistence
 
 # Project Structure
 
   src/
   ├── components/
+  │   ├── chatInterface.tsx
   │   ├── sidenav.tsx
-  │   ├── chatinterface.tsx
+  │
+  ├── hooks/
+  │   ├── useChatInterface.ts
+  │
+  ├── pages/
+  │   ├── chatPage.tsx
+  │
+  ├── services/
+  │   ├── vhatService.ts
+  │
+  ├── store/
+  │   ├── chatSlice.ts
+  │   ├── index.ts
   │
   ├── styles/
   │   └── common.css
+  │
+  ├── types/
+  │   └── global.ts
   │
   ├── App.tsx
   ├── main.tsx

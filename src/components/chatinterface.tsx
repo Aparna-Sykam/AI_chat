@@ -1,77 +1,144 @@
-import useChatInterface from "../hooks/useChatInterface";
+import { Loader2, ThumbsDown, ThumbsUp } from "lucide-react";
+import type { ChatMessage } from "../types/global";
 
-export default function ChatInterface() {
-    const { messages, input, loading, setInput, sendMessage } =
-        useChatInterface();
+type ChatInterfaceProps = {
+    messages: ChatMessage[];
+    input: string;
+    loading: boolean;
+    error: string | null;
+    onChange: (value: string) => void;
+    onSubmit: () => void;
+    onClear: () => void;
+    onLike: (id: string) => void;
+    onDislike: (id: string) => void;
+};
 
+export default function ChatInterface({
+    messages,
+    input,
+    loading,
+    error,
+    onChange,
+    onSubmit,
+    onClear,
+    onLike,
+    onDislike,
+}: ChatInterfaceProps) {
     return (
-        <div className="flex h-full w-full min-w-0 flex-col bg-slate-100">
+        <>
+            {messages.length > 0 && (
+                <div className="flex justify-end px-6 py-2">
+                    <button
+                        onClick={onClear}
+                        className="rounded-lg px-3 py-1 text-xs text-slate-600 hover:bg-slate-200 shadow-sm"
+                    >
+                        Clear
+                    </button>
+                </div>
+            )}
 
-            {/* Messages */}
-            <div className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-6 py-6">
+            <div className="flex-1 overflow-y-auto px-6 py-6">
                 <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-
-                    {messages.length === 0 && (
-                        <div className="text-sm text-slate-500">
-                            Hi, I'm your AI assistant. How can I help you today?
-                        </div>
+                    {messages.length === 0 && !loading && (
+                        <div className="text-sm text-slate-500">Hi, I am your AI assistant. How can I help you today?</div>
                     )}
 
-                    {messages.map((message, index) => (
-                        <div
-                            key={`${message.role}-${index}`}
-                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"
-                                }`}
-                        >
-                            <div
-                                className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm ${message.role === "user"
-                                    ? "bg-slate-900 text-white"
-                                    : "bg-white text-slate-800"
-                                    }`}
-                            >
-                                {message.content}
+                    {messages.map((message) => {
+                        const isAssistant = message.role === "assistant";
+
+                        return (
+                            <div key={message.id} className="flex flex-col gap-1">
+                                <div
+                                    className={`flex ${isAssistant ? "justify-start" : "justify-end"
+                                        }`}
+                                >
+                                    <div
+                                        className={`max-w-[95%] rounded-2xl px-4 py-3 text-sm ${isAssistant
+                                            ? "bg-white-900 text-black"
+                                            : "bg-gray-200 text-slate-800 shadow-sm"
+                                            }`}
+                                    >
+                                        {message.content}
+                                    </div>
+                                </div>
+
+                                {isAssistant && (
+                                    <div className="flex justify-start gap-2 pr-2">
+                                        <button
+                                            onClick={() => onLike(message.id)}
+                                            className={`rounded p-1 transition ${message.reaction === "like"
+                                                ? "text-green-600"
+                                                : "text-slate-400 hover:bg-slate-200"
+                                                }`}
+                                        >
+                                            <ThumbsUp
+                                                size={16}
+                                                fill={message.reaction === "like" ? "currentColor" : "none"}
+                                            />
+                                        </button>
+
+                                        <button
+                                            onClick={() => onDislike(message.id)}
+                                            className={`rounded p-1 transition ${message.reaction === "dislike"
+                                                ? "text-red-600"
+                                                : "text-slate-400 hover:bg-slate-200"
+                                                }`}
+                                        >
+                                            <ThumbsDown
+                                                size={16}
+                                                fill={message.reaction === "dislike" ? "currentColor" : "none"}
+                                            />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+
+                    {error && (
+                        <div className="flex justify-start">
+                            <div className="max-w-[75%] rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600 shadow-sm">
+                                {error}
                             </div>
                         </div>
-                    ))}
-
-                    {loading && (
-                        <div className="text-sm text-slate-500">
-                            Thinking...
-                        </div>
                     )}
 
+                    {loading && (
+                        <div className="flex justify-start">
+                            <div className="flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm text-white shadow-sm">
+                                <Loader2 size={16} className="animate-spin" />
+                                Processing your request...
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Input */}
             <div className="px-6 py-4">
-                <div className="mx-auto flex w-full max-w-5xl items-center gap-3 bg-white p-3 rounded-xl">
-
+                <div className="mx-auto flex w-full max-w-5xl items-center gap-3 rounded-xl bg-white p-3 shadow-sm">
                     <input
                         type="text"
-                        placeholder="Type your message..."
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Type your message..."
+                        onChange={(e) => onChange(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
                                 e.preventDefault();
-                                sendMessage();
+                                onSubmit();
                             }
                         }}
                         className="flex-1 bg-transparent px-2 py-2 text-sm outline-none placeholder:text-slate-400"
                     />
 
                     <button
-                        onClick={sendMessage}
+                        onClick={onSubmit}
                         disabled={loading || !input.trim()}
-                        className="rounded-lg bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800 disabled:opacity-50"
+                        className="rounded-lg bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        Send
+                        {loading ? "Sending..." : "Send"}
                     </button>
-
                 </div>
             </div>
-
-        </div>
+        </>
     );
 }
