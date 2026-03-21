@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Sidenav from "./components/sidenav";
 
