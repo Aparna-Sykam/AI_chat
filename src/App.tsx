@@ -12,7 +12,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/chat" replace />} />
           <Route path="/chat" element={<ChatPage />} />
-          <Route path="*" element={<Navigate to="/chat" replace />} />
+          <Route path="/chat/:id" element={<ChatPage />} />
         </Routes>
       </main>
     </div>

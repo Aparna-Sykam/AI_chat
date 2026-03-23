@@ -48,7 +48,7 @@ export default function Sidenav() {
                             handleCreateNewChat();
                             navigate("/chat");
                         }}
-                        className={menuClass(location.pathname === "/chat")}
+                        className={menuClass(location.pathname.startsWith("/chat"))}
                         title="New Chat"
                     >
                         <PenSquare size={18} />
@@ -80,7 +80,7 @@ export default function Sidenav() {
                                     <button
                                         onClick={() => {
                                             handleSelectChat(session.id);
-                                            navigate("/chat");
+                                            navigate(`/chat/${session.id}`);
                                         }}
                                         className={`min-w-0 flex-1 px-3 py-2 text-left text-sm ${session.id === activeChatId
                                             ? "text-slate-900"
